@@ -10,35 +10,36 @@ import MapKit
 
 struct MainView: View {
     @StateObject private var mainVM = MainViewModel()
-    @StateObject private var locationManager = LocationManager.shared
     
     var body: some View {
-        ZStack {
-            if locationManager.userLocation == nil {
-                LocationRequestingView()
-            } else if let location = locationManager.userLocation {
-                Text("\(location)")
-//                // Background
-//                Map(coordinateRegion: $mainVM.region, showsUserLocation: true)
-//                    .ignoresSafeArea()
-//
-//                // Interface Layer
-//                VStack {
-//                    // SearchBar
-//                    Text("SearchBar here")
-//
-//                    Spacer()
-//
-//                    // Controls
-//                    HStack {
-//                        Text("Controls")
-//                    }
-//                    .frame(maxWidth: .infinity)
-//                    .background(.thinMaterial)
-//                    .cornerRadius(25)
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .padding()
+        if LocationManager.shared.userLocation == nil {
+            LocationRequestingView()
+        } else {
+            ZStack {
+                // Background
+                Map(coordinateRegion: $mainVM.region, showsUserLocation: true)
+                    .ignoresSafeArea()
+
+                // Interface Layer
+                VStack {
+                    // SearchBar
+                    Text("SearchBar here")
+
+                    Spacer()
+
+                    // Controls
+                    HStack {
+                        Text("Controls")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(.thinMaterial)
+                    .cornerRadius(25)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding()
+            }
+            .onAppear {
+                mainVM.setUserLocation()
             }
         }
     }
