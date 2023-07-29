@@ -16,33 +16,36 @@ class WeatherViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        loadData()
+//        loadData()
     }
-    
-    private func loadData() {
-        guard let apiKey: String = Bundle.getAPIKey(for: openKey) else { return }
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=37.4872&lon=126.8334&appid=\(apiKey)&units=metric&lang=kr") else { return }
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .receive(on: DispatchQueue.main)
-            .tryMap { output in
-                guard
-                    let response = output.response as? HTTPURLResponse,
-                    response.statusCode >= 200 && response.statusCode < 300 else {
-                    throw URLError(.badServerResponse)
-                }
-                
-                return output.data
-            }
-            .decode(type: WeatherModel.self, decoder: JSONDecoder())
-            .sink { completion in
-                switch completion {
-                case .finished: break
-                case .failure(let error): print("디코딩 실패: \(error)")
-                }
-            } receiveValue: { [weak self] returnedWeatherModel in
-                self?.weather = returnedWeatherModel
-            }
-            .store(in: &cancellables)
-    }
+}
+
+// MARK: Weather Data Service Methods
+extension WeatherViewModel {
+//    private func loadData() {
+//        guard let apiKey: String = Bundle.getAPIKey(for: openKey) else { return }
+//        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(region.center.latitude)&lon=\(region.center.longitude)&appid=\(apiKey)&units=metric&lang=kr") else { return }
+//
+//        URLSession.shared.dataTaskPublisher(for: url)
+//            .receive(on: DispatchQueue.main)
+//            .tryMap { output in
+//                guard
+//                    let response = output.response as? HTTPURLResponse,
+//                    response.statusCode >= 200 && response.statusCode < 300 else {
+//                    throw URLError(.badServerResponse)
+//                }
+//
+//                return output.data
+//            }
+//            .decode(type: WeatherModel.self, decoder: JSONDecoder())
+//            .sink { completion in
+//                switch completion {
+//                case .finished: break
+//                case .failure(let error): print("디코딩 실패: \(error)")
+//                }
+//            } receiveValue: { [weak self] returnedWeatherModel in
+//                self?.weather = returnedWeatherModel
+//            }
+//            .store(in: &cancellables)
+//    }
 }

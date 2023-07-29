@@ -6,19 +6,13 @@
 //
 
 import SwiftUI
-import MapKit
 
 struct WeatherView: View {
     @StateObject private var weatherVM = WeatherViewModel()
     
     var body: some View {
         ZStack {
-            Map
             
-            VStack {
-                Text(weatherVM.weather?.name ?? "no")
-                    .font(.largeTitle)
-            }
         }
     }
 }
