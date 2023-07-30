@@ -15,7 +15,9 @@ class LocationManager: NSObject, ObservableObject {
     
     private let locationManager = CLLocationManager()
     
-    override init() {
+    static let shared = LocationManager()
+    
+    private override init() {
         super.init()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone

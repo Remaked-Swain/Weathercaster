@@ -15,7 +15,7 @@ struct MainView: View {
     var body: some View {
         ZStack {
             // Background
-            Map(coordinateRegion: $locationManager.region, showsUserLocation: true)
+            Map(coordinateRegion: $mainVM.region, showsUserLocation: true)
                 .ignoresSafeArea()
 
             // Interface Layer
@@ -24,13 +24,7 @@ struct MainView: View {
 
                 Spacer()
 
-                // Controls
-                HStack {
-                    Text("Controls")
-                }
-                .frame(maxWidth: .infinity)
-                .background(.thinMaterial)
-                .cornerRadius(25)
+                weatherSection
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
@@ -41,7 +35,7 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
-            .environmentObject(LocationManager())
+            .environmentObject(LocationManager.shared)
     }
 }
 
@@ -51,27 +45,35 @@ extension MainView {
             SearchBar(textFieldText: $mainVM.textFieldText)
             
             if mainVM.textFieldText.isEmpty == false {
-                List(mainVM.places) { place in
-                    VStack(alignment:. leading) {
-                        Text(place.name)
-                            .font(.headline)
-                        Text(place.address)
-                            .font(.callout)
+                ScrollView {
+                    LazyVStack(alignment: .leading) {
+                        ForEach(mainVM.places) { place in
+                            SearchListCell(place: place)
+                                .padding()
+                        }
                     }
                 }
-                .listStyle(.plain)
-                .searchable(text: $mainVM.textFieldText)
-                .onChange(of: mainVM.textFieldText, perform: { text in
-                    if text.isEmpty == false {
-                        mainVM.searchAddress(text: text, region: locationManager.region)
-                    } else {
-                        mainVM.places = []
-                    }
-                })
                 .background(.thinMaterial)
                 .cornerRadius(14)
             }
         }
         .shadow(radius: 10)
+    }
+    
+    private var weatherSection: some View {
+        VStack {
+            // Full Weather Info
+            VStack {
+                
+            }
+            
+            // Summary Weather Info
+            HStack {
+                Text("Controls")
+            }
+            .frame(maxWidth: .infinity)
+            .background(.thinMaterial)
+            .cornerRadius(25)
+        }
     }
 }

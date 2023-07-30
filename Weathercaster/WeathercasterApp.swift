@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct WeathercasterApp: App {
-    @StateObject private var locationManager = LocationManager()
+    @StateObject private var locationManager = LocationManager.shared
     
     var body: some Scene {
         WindowGroup {

@@ -7,13 +7,46 @@
 
 import Foundation
 import MapKit
+import Combine
 
 @MainActor
 class MainViewModel: ObservableObject {
+    // map
+    @Published var region = MKCoordinateRegion()
+    
+    // weather
+    @Published var weather: WeatherModel? = nil
+    
+    // Search by address or placemark name
     @Published var places: [PlaceModel] = []
     @Published var textFieldText: String = ""
     
-    func searchAddress(text: String, region: MKCoordinateRegion) {
+    // Services
+    private let weatherDataService = WeatherDataService()
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        holdCameraOnLocation()
+        addSubscribers()
+    }
+    
+    func addSubscribers() {
+        // textFieldText의 변화가 있으면 0.5초 유예한 후 중복 요청을 제거, 마지막 검색 응답만 수신
+        $textFieldText
+            .filter { $0.isEmpty == false }
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink { [weak self] searchText in
+                self?.searchAddress(text: searchText, region: LocationManager.shared.region)
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: LocationManager Methods
+extension MainViewModel {
+    private func searchAddress(text: String, region: MKCoordinateRegion) {
         // 검색 조건
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = text
@@ -22,10 +55,21 @@ class MainViewModel: ObservableObject {
         // 검색 조건 전달
         let search = MKLocalSearch(request: request)
         
-        // 검색 수행
+        // 검색 수행하고 MapKit에서 응답받은 결과물을 저장
         search.start { response, error in
             guard let response = response else { print("검색 실패. \(error?.localizedDescription ?? "Unknown Error")"); return }
             self.places = response.mapItems.map(PlaceModel.init)
         }
+    }
+    
+    private func holdCameraOnLocation() {
+        self.region = LocationManager.shared.region
+    }
+}
+
+// MARK: OpenWeatherMap API Methods
+extension MainViewModel {
+    private func loadData() {
+        
     }
 }

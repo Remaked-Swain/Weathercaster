@@ -31,10 +31,3 @@ struct SearchBar: View {
         .cornerRadius(14)
     }
 }
-
-struct SearchBar_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            .environmentObject(LocationManager())
-    }
-}
