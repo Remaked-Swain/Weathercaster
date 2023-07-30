@@ -58,24 +58,24 @@ import Foundation
 
 struct WeatherModel: Codable {
     let coord: Coord? // 좌표
-    let weather: [Weather]? // 기상상태 id, 대표설명, 부가설명, 아이콘
-    let base: String? // 내부 매개변수 -> 쓸 일 없음
+    let weather: [Weather]? // [기상상태 id, 대표설명, 부가설명, 아이콘]
+    let base: String? // 기상 데이터의 출처
     let main: Main? // 평균기온, 체감온도, 최저온도, 최대온도, 기압, 습도
     let visibility: Int? // 가시성(미터 단위)
-    let wind: Wind?
-    let clouds: Clouds?
-    let dt: Int?
-    let sys: Sys?
-    let timezone, id: Int?
-    let name: String?
-    let cod: Int?
+    let wind: Wind? // 풍속, 풍향
+    let clouds: Clouds? // 전체 구름 양을 백분율로 나타냄
+    let dt: Int? // 기상 정보가 제공된 시간 (타임스탬프)
+    let sys: Sys? // 일출시각, 일몰시각, 국가코드(두 글자 알파벳)
+    let timezone, id: Int? // UTC와의 시간차, 지역 id
+    let name: String? // 지명
+    let cod: Int? // 서버 응답 코드 -> 따로 활용할 일 없음
 }
 
 struct Coord: Codable {
     let lon, lat: Double?
 }
 
-struct Weather: Codable {
+struct Weather: Codable, Identifiable {
     let id: Int?
     let main, description, icon: String?
 }
@@ -105,4 +105,31 @@ struct Sys: Codable {
     let type, id: Int?
     let country: String?
     let sunrise, sunset: Int?
+}
+
+@frozen enum WeatherType: String {
+//    case coord, base, dt
+    case weatherList, main, visibility, wind, clouds, sys
+    
+    var imageName: String {
+        switch self {
+        case .weatherList: return "calendar"
+        case .main: return "thermometer.medium"
+        case .visibility: return "eye"
+        case .wind: return "wind"
+        case .clouds: return "cloud.fill"
+        case .sys: return "sun.and.horizon"
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .weatherList: return "기상 상태"
+        case .main: return "기온, 기압, 습도"
+        case .visibility: return "가시성"
+        case .wind: return "바람"
+        case .clouds: return "구름 양"
+        case .sys: return "일출, 일몰"
+        }
+    }
 }

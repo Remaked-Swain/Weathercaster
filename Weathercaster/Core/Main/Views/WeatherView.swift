@@ -16,12 +16,11 @@ struct WeatherView: View {
     }
     
     var body: some View {
-        VStack {
-            summaryWeatherInfo
-            
-            if mainVM.showFullWeatherInfo {
-                fullWeatherInfo
-            }
+        summaryWeatherInfo
+        
+        if mainVM.showFullWeatherInfo {
+            fullWeatherInfo
+                .transition(.push(from: .top))
         }
     }
 }
@@ -38,6 +37,7 @@ extension WeatherView {
     private var summaryWeatherInfo: some View {
         // Summary Weather Info
         HStack {
+            // Weather IconImage
             if let image = weatherVM.image {
                 Image(uiImage: image)
                     .resizable()
@@ -51,11 +51,18 @@ extension WeatherView {
             }
             
             VStack(alignment: .leading) {
+                // Weather 지역명
                 Text(weatherVM.weather.name ?? "-")
                     .font(.title.weight(.bold))
-                
-                Text("")
-                    .font(.caption)
+                // 기상상태 대표설명
+                if let weatherList = weatherVM.weather.weather {
+                    HStack {
+                        ForEach(weatherList, id: \.id) {
+                            Text($0.main ?? "")
+                                .font(.caption)
+                        }
+                    }
+                }
             }
             
             Spacer()
@@ -77,8 +84,61 @@ extension WeatherView {
     
     private var fullWeatherInfo: some View {
         // Full Weather Info
-        VStack {
-            
+        ScrollView {
+            LazyVStack(pinnedViews: .sectionHeaders) {
+                // 기상 상태
+                if let weatherList = weatherVM.weather.weather {
+                    Section {
+                        HStack {
+                            ForEach(weatherList, id: \.id) { weather in
+                                Text(weather.description ?? "")
+                                    .font(.headline)
+                            }
+                        }
+                        .padding()
+                    } header: {
+                        FullWeatherInfoViewHeader(weatherType: .weatherList)
+                    }
+                }
+                Divider()
+                // 온도, 기압, 습도
+                if let main = weatherVM.weather.main {
+                    Section {
+                        HStack {
+                            VStack {
+                                FullWeatherInfoMain(title: "평균 기온", value: main.temp ?? 0)
+                                    .padding()
+                                FullWeatherInfoMain(title: "체감 온도", value: main.feelsLike ?? 0)
+                                    .padding()
+                            }
+                            
+                            VStack {
+                                FullWeatherInfoMain(title: "최저 온도", value: main.tempMin ?? 0)
+                                    .padding()
+                                FullWeatherInfoMain(title: "최대 온도", value: main.tempMax ?? 0)
+                                    .padding()
+                            }
+                            
+                            VStack {
+                                FullWeatherInfoMain(title: "기압", value: main.feelsLike ?? 0)
+                                    .padding()
+                                FullWeatherInfoMain(title: "습도", value: main.feelsLike ?? 0)
+                                    .padding()
+                            }
+                        }
+                        .padding()
+                    } header: {
+                        HStack {
+                            FullWeatherInfoViewHeader(weatherType: .main)
+                        }
+                    }
+                }
+                Divider()
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.thinMaterial)
+            .cornerRadius(14)
         }
     }
 }

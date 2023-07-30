@@ -31,6 +31,7 @@ struct MainView: View {
                 if let weather = mainVM.weather {
                     WeatherView(weather: weather)
                         .environmentObject(mainVM)
+                        .shadow(radius: 10)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
