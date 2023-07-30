@@ -8,15 +8,24 @@
 import Foundation
 import MapKit
 
-final class MainViewModel: ObservableObject {
-    @Published var region: MKCoordinateRegion = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 37.4872, longitude: 126.8334),
-        span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-    )
+@MainActor
+class MainViewModel: ObservableObject {
+    @Published var places: [PlaceModel] = []
+    @Published var textFieldText: String = ""
     
-    func setUserLocation() {
-        guard let coordinate2D = LocationManager.shared.userLocation?.coordinate else { return }
-        print(coordinate2D)
-        region = MKCoordinateRegion(center: coordinate2D, span: region.span)
+    func searchAddress(text: String, region: MKCoordinateRegion) {
+        // 검색 조건
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = text
+        request.region = region
+        
+        // 검색 조건 전달
+        let search = MKLocalSearch(request: request)
+        
+        // 검색 수행
+        search.start { response, error in
+            guard let response = response else { print("검색 실패. \(error?.localizedDescription ?? "Unknown Error")"); return }
+            self.places = response.mapItems.map(PlaceModel.init)
+        }
     }
 }
