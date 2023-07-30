@@ -9,14 +9,17 @@ import SwiftUI
 
 struct WeatherView: View {
     @EnvironmentObject private var mainVM: MainViewModel
+    @StateObject private var weatherVM: WeatherViewModel
     
-    @Binding var showFullWeatherInfo: Bool
+    init(weather: WeatherModel) {
+        _weatherVM = StateObject(wrappedValue: WeatherViewModel(weather: weather))
+    }
     
     var body: some View {
         VStack {
             summaryWeatherInfo
             
-            if showFullWeatherInfo {
+            if mainVM.showFullWeatherInfo {
                 fullWeatherInfo
             }
         }
@@ -35,11 +38,23 @@ extension WeatherView {
     private var summaryWeatherInfo: some View {
         // Summary Weather Info
         HStack {
+            if let image = weatherVM.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+            } else if weatherVM.isLoading {
+                ProgressView()
+            } else {
+                Image(systemName: "questionmark")
+                    .foregroundColor(.secondary)
+            }
+            
             VStack(alignment: .leading) {
-                Text("Name")
+                Text(weatherVM.weather.name ?? "-")
                     .font(.title.weight(.bold))
                 
-                Text("description")
+                Text("")
                     .font(.caption)
             }
             
@@ -49,7 +64,7 @@ extension WeatherView {
                 toggleWeatherView()
             } label: {
                 Image(systemName: "chevron.down")
-                    .rotationEffect(Angle(degrees: showFullWeatherInfo ? 180 : 360))
+                    .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 180 : 360))
                     .imageScale(.large)
                     .font(.headline)
             }
@@ -72,7 +87,7 @@ extension WeatherView {
 extension WeatherView {
     private func toggleWeatherView() {
         withAnimation(.spring()) {
-            showFullWeatherInfo.toggle()
+            mainVM.showFullWeatherInfo.toggle()
         }
     }
 }

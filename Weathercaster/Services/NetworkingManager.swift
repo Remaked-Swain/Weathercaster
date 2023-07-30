@@ -23,9 +23,28 @@ class NetworkingManager {
     
     static func download(url: URL) -> AnyPublisher<Data, Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
+        // Working on DispatchQueue.global
             .subscribe(on: DispatchQueue.global())
-            .tryMap { output in
-                guard let response
-            }
+        // 서버 응답 체크
+            .tryMap({ try handleURLResponse(output: $0, url: url) })
+        // Working on DispatchQueue.main
+            .receive(on: DispatchQueue.main)
+        // 게시자를 지워서 타입 간결하게 하기
+            .eraseToAnyPublisher()
+    }
+    
+    static func handleURLResponse(output: URLSession.DataTaskPublisher.Output, url: URL) throws -> Data {
+        guard let response = output.response as? HTTPURLResponse,
+              response.statusCode >= 200 && response.statusCode < 300
+        else { throw NetworkingError.badURLResponse(url: url) }
+        
+        return output.data
+    }
+    
+    static func handleCompletion(completion: Subscribers.Completion<Error>) {
+        switch completion {
+        case .finished: break
+        case .failure(let error): print("Completion Error: \(error)")
+        }
     }
 }

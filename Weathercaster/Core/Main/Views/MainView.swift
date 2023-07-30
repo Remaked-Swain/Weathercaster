@@ -13,7 +13,6 @@ struct MainView: View {
     @StateObject private var mainVM = MainViewModel()
     
     @State private var annotationPlaces: [PlaceModel] = []
-    @State private var showFullWeatherInfo: Bool = false
     
     var body: some View {
         ZStack {
@@ -29,7 +28,10 @@ struct MainView: View {
 
                 Spacer()
 
-                weatherSection
+                if let weather = mainVM.weather {
+                    WeatherView(weather: weather)
+                        .environmentObject(mainVM)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
@@ -51,7 +53,7 @@ extension MainView {
             SearchBar(textFieldText: $mainVM.textFieldText)
                 .onTapGesture {
                     // 검색창 조작 시 화면 확보를 위해 WeatherView 접기.
-                    guard showFullWeatherInfo else { return }
+                    guard mainVM.showFullWeatherInfo else { return }
                     toggleWeatherView()
                 }
             
@@ -74,11 +76,6 @@ extension MainView {
         }
         .shadow(radius: 10)
     }
-    
-    private var weatherSection: some View {
-        WeatherView(showFullWeatherInfo: $showFullWeatherInfo)
-            .environmentObject(mainVM)
-    }
 }
 
 // MARK: Methods
@@ -97,7 +94,7 @@ extension MainView {
     
     private func toggleWeatherView() {
         withAnimation(.spring()) {
-            showFullWeatherInfo.toggle()
+            mainVM.showFullWeatherInfo.toggle()
         }
     }
 }

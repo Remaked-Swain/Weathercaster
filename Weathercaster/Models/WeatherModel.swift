@@ -57,11 +57,11 @@ import Foundation
  */
 
 struct WeatherModel: Codable {
-    let coord: Coord?
-    let weather: [Weather]?
-    let base: String?
-    let main: Main?
-    let visibility: Int?
+    let coord: Coord? // 좌표
+    let weather: [Weather]? // 기상상태 id, 대표설명, 부가설명, 아이콘
+    let base: String? // 내부 매개변수 -> 쓸 일 없음
+    let main: Main? // 평균기온, 체감온도, 최저온도, 최대온도, 기압, 습도
+    let visibility: Int? // 가시성(미터 단위)
     let wind: Wind?
     let clouds: Clouds?
     let dt: Int?

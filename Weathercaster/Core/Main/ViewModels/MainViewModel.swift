@@ -17,6 +17,7 @@ class MainViewModel: ObservableObject {
     
     // weather
     @Published var weather: WeatherModel? = nil
+    @Published var showFullWeatherInfo: Bool = false
     
     // Search by address or placemark name
     @Published var searchResults: [PlaceModel] = []
