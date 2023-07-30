@@ -23,13 +23,14 @@ class MainViewModel: ObservableObject {
     @Published var textFieldText: String = ""
     
     // Services
-    private let weatherDataService = WeatherDataService()
+    private let weatherDataService = WeatherDataService(coordinates: LocationManager.shared.region.center)
     
     private var cancellables = Set<AnyCancellable>()
     
     init() {
         moveCameraOnLocation(to: nil)
         addSubscribers()
+        connectWeatherDataService()
     }
     
     func addSubscribers() {
@@ -80,7 +81,11 @@ extension MainViewModel {
 
 // MARK: OpenWeatherMap API Methods
 extension MainViewModel {
-    private func loadData() {
-        
+    private func connectWeatherDataService() {
+        weatherDataService.$weather
+            .sink { [weak self] receiveWeatherModel in
+                self?.weather = receiveWeatherModel
+            }
+            .store(in: &cancellables)
     }
 }

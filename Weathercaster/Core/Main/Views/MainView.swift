@@ -49,6 +49,11 @@ extension MainView {
     private var searchSection: some View {
         VStack {
             SearchBar(textFieldText: $mainVM.textFieldText)
+                .onTapGesture {
+                    // 검색창 조작 시 화면 확보를 위해 WeatherView 접기.
+                    guard showFullWeatherInfo else { return }
+                    toggleWeatherView()
+                }
             
             if mainVM.textFieldText.isEmpty == false {
                 ScrollView {
@@ -71,37 +76,8 @@ extension MainView {
     }
     
     private var weatherSection: some View {
-        VStack {
-            // Summary Weather Info
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(mainVM.place?.name ?? "-")
-                        .font(.title.weight(.bold))
-                    
-                    Text(mainVM.place?.address ?? "-")
-                        .font(.caption)
-                }
-                
-                Spacer()
-                
-                Button {
-                    // splash full whether info
-                } label: {
-                    Image(systemName: showFullWeatherInfo ? "chevron.down" : "chevron.up")
-                        .imageScale(.large)
-                        .font(.headline)
-                }
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.thinMaterial)
-            .cornerRadius(14)
-            
-            // Full Weather Info
-            VStack {
-                
-            }
-        }
+        WeatherView(showFullWeatherInfo: $showFullWeatherInfo)
+            .environmentObject(mainVM)
     }
 }
 
@@ -116,6 +92,12 @@ extension MainView {
         withAnimation(.easeInOut) {
             mainVM.moveCameraOnLocation(to: place)
             mainVM.textFieldText.removeAll()
+        }
+    }
+    
+    private func toggleWeatherView() {
+        withAnimation(.spring()) {
+            showFullWeatherInfo.toggle()
         }
     }
 }

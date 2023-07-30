@@ -11,6 +11,7 @@ struct SearchBar: View {
     @Binding var textFieldText: String
     
     var body: some View {
+        // SearchBar
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(textFieldText.isEmpty ? .secondary : .theme.accentColor)
