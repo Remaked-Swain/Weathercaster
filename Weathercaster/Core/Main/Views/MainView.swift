@@ -12,10 +12,15 @@ struct MainView: View {
     @EnvironmentObject private var locationManager: LocationManager
     @StateObject private var mainVM = MainViewModel()
     
+    @State private var annotationPlaces: [PlaceModel] = []
+    @State private var showFullWeatherInfo: Bool = false
+    
     var body: some View {
         ZStack {
             // Background
-            Map(coordinateRegion: $mainVM.region, showsUserLocation: true)
+            Map(coordinateRegion: $mainVM.region, showsUserLocation: true, annotationItems: annotationPlaces) { place in
+                MapMarker(coordinate: place.coordinates, tint: .theme.accentColor)
+            }
                 .ignoresSafeArea()
 
             // Interface Layer
@@ -38,7 +43,8 @@ struct MainView_Previews: PreviewProvider {
             .environmentObject(LocationManager.shared)
     }
 }
-
+ 
+// MARK: Extracted Views
 extension MainView {
     private var searchSection: some View {
         VStack {
@@ -47,9 +53,13 @@ extension MainView {
             if mainVM.textFieldText.isEmpty == false {
                 ScrollView {
                     LazyVStack(alignment: .leading) {
-                        ForEach(mainVM.places) { place in
+                        ForEach(mainVM.searchResults) { place in
                             SearchListCell(place: place)
                                 .padding()
+                                .onTapGesture {
+                                    pinMapMarker(to: place)
+                                    moveCameraOnLocation(to: place)
+                                }
                         }
                     }
                 }
@@ -62,18 +72,50 @@ extension MainView {
     
     private var weatherSection: some View {
         VStack {
+            // Summary Weather Info
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(mainVM.place?.name ?? "-")
+                        .font(.title.weight(.bold))
+                    
+                    Text(mainVM.place?.address ?? "-")
+                        .font(.caption)
+                }
+                
+                Spacer()
+                
+                Button {
+                    // splash full whether info
+                } label: {
+                    Image(systemName: showFullWeatherInfo ? "chevron.down" : "chevron.up")
+                        .imageScale(.large)
+                        .font(.headline)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.thinMaterial)
+            .cornerRadius(14)
+            
             // Full Weather Info
             VStack {
                 
             }
-            
-            // Summary Weather Info
-            HStack {
-                Text("Controls")
-            }
-            .frame(maxWidth: .infinity)
-            .background(.thinMaterial)
-            .cornerRadius(25)
+        }
+    }
+}
+
+// MARK: Methods
+extension MainView {
+    private func pinMapMarker(to place: PlaceModel) {
+        annotationPlaces.removeAll()
+        annotationPlaces.append(place)
+    }
+    
+    private func moveCameraOnLocation(to place: PlaceModel) {
+        withAnimation(.easeInOut) {
+            mainVM.moveCameraOnLocation(to: place)
+            mainVM.textFieldText.removeAll()
         }
     }
 }

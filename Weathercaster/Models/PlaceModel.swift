@@ -45,11 +45,10 @@ struct PlaceModel: Identifiable {
         return address
     }
     
-    var latitude: CLLocationDegrees {
-        self.mapItem.placemark.coordinate.latitude
-    }
-    
-    var longitude: CLLocationDegrees {
-        self.mapItem.placemark.coordinate.longitude
+    var coordinates: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(
+            latitude: self.mapItem.placemark.coordinate.latitude,
+            longitude: self.mapItem.placemark.coordinate.longitude
+        )
     }
 }

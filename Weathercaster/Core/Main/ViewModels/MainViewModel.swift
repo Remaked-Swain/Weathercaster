@@ -13,12 +13,13 @@ import Combine
 class MainViewModel: ObservableObject {
     // map
     @Published var region = MKCoordinateRegion()
+    @Published var place: PlaceModel? = nil
     
     // weather
     @Published var weather: WeatherModel? = nil
     
     // Search by address or placemark name
-    @Published var places: [PlaceModel] = []
+    @Published var searchResults: [PlaceModel] = []
     @Published var textFieldText: String = ""
     
     // Services
@@ -27,7 +28,7 @@ class MainViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        holdCameraOnLocation()
+        moveCameraOnLocation(to: nil)
         addSubscribers()
     }
     
@@ -58,12 +59,22 @@ extension MainViewModel {
         // 검색 수행하고 MapKit에서 응답받은 결과물을 저장
         search.start { response, error in
             guard let response = response else { print("검색 실패. \(error?.localizedDescription ?? "Unknown Error")"); return }
-            self.places = response.mapItems.map(PlaceModel.init)
+            self.searchResults = response.mapItems.map(PlaceModel.init)
         }
     }
     
-    private func holdCameraOnLocation() {
-        self.region = LocationManager.shared.region
+    // 카메라를 특정 좌표로 이동하거나 nil이 들어오면 현재 사용자 위치로 이동
+    func moveCameraOnLocation(to place: PlaceModel?) {
+        guard let place = place else {
+            self.region = LocationManager.shared.region
+            return
+        }
+        
+        self.place = place
+        self.region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: place.coordinates.latitude, longitude: place.coordinates.longitude),
+            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        )
     }
 }
 
