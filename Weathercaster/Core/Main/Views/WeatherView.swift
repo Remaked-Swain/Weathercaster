@@ -99,6 +99,7 @@ extension WeatherView {
                     } header: {
                         FullWeatherInfoViewHeader(weatherType: .weatherList)
                     }
+                    .padding()
                 }
                 Divider()
                 // 온도, 기압, 습도
@@ -132,10 +133,10 @@ extension WeatherView {
                             FullWeatherInfoViewHeader(weatherType: .main)
                         }
                     }
+                    .padding()
                 }
                 Divider()
             }
-            .padding()
             .frame(maxWidth: .infinity)
             .background(.thinMaterial)
             .cornerRadius(14)

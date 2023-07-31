@@ -21,11 +21,13 @@ class WeatherDataService {
         loadData(coordinates)
     }
     
-    private func loadData(_ coordinates: CLLocationCoordinate2D) {
+    func loadData(_ coordinates: CLLocationCoordinate2D) {
         // Read Bundle to get apiKey
         guard let apiKey: String = Bundle.getAPIKey(for: openKey) else { return }
         
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(apiKey)&units=metric&lang=kr") else { print("유효하지 않은 URL"); return }
+        
+        print("URL: \(url.description) 날씨 정보 요청")
         
         weatherSubscription = NetworkingManager.download(url: url)
         // Converting to WeatherModel
@@ -37,7 +39,5 @@ class WeatherDataService {
                     self?.weather = receivedWeatherModel
                     self?.weatherSubscription?.cancel()
             })
-        
-        
     }
 }

@@ -27,13 +27,13 @@ struct PlaceModel: Identifiable {
         // 상위 지명(시, 구 등)
         cityAndState = self.mapItem.placemark.locality ?? ""
         if let city = self.mapItem.placemark.administrativeArea {
-            cityAndState = cityAndState.isEmpty ? city : "\(city), \(cityAndState)"
+            cityAndState = cityAndState.isEmpty ? city : "\(city) \(cityAndState)"
         }
         
         // 하위 지명(동, 도로명 혹은 지번)
         address = self.mapItem.placemark.subThoroughfare ?? ""
         if let street = self.mapItem.placemark.thoroughfare {
-            address = address.isEmpty ? street : "\(street), \(address)"
+            address = address.isEmpty ? street : "\(street) \(address)"
         }
         
         if address.trimmingCharacters(in: .whitespaces).isEmpty && !cityAndState.isEmpty {
@@ -41,7 +41,7 @@ struct PlaceModel: Identifiable {
             address = cityAndState
         } else {
             // 도시가 없으면 하위주소만 트리밍
-            address = cityAndState.isEmpty ? address : "\(cityAndState), \(address)"
+            address = cityAndState.isEmpty ? address : "\(cityAndState) \(address)"
         }
         
         return address

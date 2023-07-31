@@ -13,7 +13,6 @@ import Combine
 class MainViewModel: ObservableObject {
     // map
     @Published var region = MKCoordinateRegion()
-    @Published var place: PlaceModel? = nil
     
     // weather
     @Published var weather: WeatherModel? = nil
@@ -31,7 +30,6 @@ class MainViewModel: ObservableObject {
     init() {
         moveCameraOnLocation(to: nil)
         addSubscribers()
-        connectWeatherDataService()
     }
     
     func addSubscribers() {
@@ -44,18 +42,25 @@ class MainViewModel: ObservableObject {
                 self?.searchAddress(text: searchText, region: LocationManager.shared.region)
             }
             .store(in: &cancellables)
+        
+        // weatherDataService 에서 유지하는 weather 에 변화가 감지되면 mainVM 의 weather 도 업데이트
+        weatherDataService.$weather
+            .sink { [weak self] receiveWeatherModel in
+                self?.weather = receiveWeatherModel
+            }
+            .store(in: &cancellables)
     }
 }
 
 // MARK: LocationManager Methods
 extension MainViewModel {
     private func searchAddress(text: String, region: MKCoordinateRegion) {
-        // 검색 조건
+        // 검색 조건 설정
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = text
         request.region = region
         
-        // 검색 조건 전달
+        // 검색 수행 객체 생성
         let search = MKLocalSearch(request: request)
         
         // 검색 수행하고 MapKit에서 응답받은 결과물을 저장
@@ -65,28 +70,26 @@ extension MainViewModel {
         }
     }
     
-    // 카메라를 특정 좌표로 이동하거나 nil이 들어오면 현재 사용자 위치로 이동
+    // 카메라를 특정 좌표로 이동하거나 nil이 들어오면 현재 사용자 위치로 이동, 바뀐 좌표의 날씨 정보로 업데이트
     func moveCameraOnLocation(to place: PlaceModel?) {
         guard let place = place else {
             self.region = LocationManager.shared.region
+            fetchWeatherDataByPlace(coordinates: LocationManager.shared.region.center)
             return
         }
         
-        self.place = place
         self.region = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: place.coordinates.latitude, longitude: place.coordinates.longitude),
             span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
         )
+        
+        fetchWeatherDataByPlace(coordinates: place.coordinates)
     }
 }
 
 // MARK: OpenWeatherMap API Methods
 extension MainViewModel {
-    private func connectWeatherDataService() {
-        weatherDataService.$weather
-            .sink { [weak self] receiveWeatherModel in
-                self?.weather = receiveWeatherModel
-            }
-            .store(in: &cancellables)
+    private func fetchWeatherDataByPlace(coordinates: CLLocationCoordinate2D) {
+        weatherDataService.loadData(coordinates)
     }
 }

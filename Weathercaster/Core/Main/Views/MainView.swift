@@ -27,6 +27,25 @@ struct MainView: View {
                 searchSection
 
                 Spacer()
+                
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        moveCameraOnLocation(to: nil)
+                    } label: {
+                        Image(systemName: "location")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .padding()
+                            .background(.thinMaterial)
+                            .clipShape(Circle())
+                            .padding(.bottom)
+                            .shadow(radius: 10)
+                    }
+                }
+                .frame(maxWidth: .infinity)
 
                 if let weather = mainVM.weather {
                     WeatherView(weather: weather)
@@ -86,7 +105,7 @@ extension MainView {
         annotationPlaces.append(place)
     }
     
-    private func moveCameraOnLocation(to place: PlaceModel) {
+    private func moveCameraOnLocation(to place: PlaceModel?) {
         withAnimation(.easeInOut) {
             mainVM.moveCameraOnLocation(to: place)
             mainVM.textFieldText.removeAll()

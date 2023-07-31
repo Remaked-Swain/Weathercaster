@@ -20,7 +20,7 @@ class ImageDataService {
         getWeatherImage()
     }
     
-    private func getWeatherImage() {
+    func getWeatherImage() {
         guard self.weather.weather?.isEmpty == false,
               let iconCode = self.weather.weather?.first?.icon
         else { print("IconCode를 확인할 수 없음."); return }
