@@ -14,14 +14,6 @@ struct MainView: View {
     
     @State private var annotationPlaces: [PlaceModel] = []
     
-    private var locationCompare: Bool {
-        let mainVMLatitude = mainVM.region.center.latitude
-        let mainVMLongitude = mainVM.region.center.longitude
-        let locationManagerLatitude = locationManager.region.center.latitude
-        let locationManagerLongitude = locationManager.region.center.longitude
-        return mainVMLatitude == locationManagerLatitude && mainVMLongitude == locationManagerLongitude
-    }
-    
     var body: some View {
         ZStack {
             // Background
@@ -95,7 +87,7 @@ extension MainView {
             Button {
                 moveCameraOnLocation(to: nil)
             } label: {
-                Image(systemName: locationCompare ? "location.fill" : "location")
+                Image(systemName: "location.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30, height: 30)
