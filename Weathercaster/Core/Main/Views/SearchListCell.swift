@@ -17,6 +17,6 @@ struct SearchListCell: View {
             Text(place.address)
                 .font(.callout)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

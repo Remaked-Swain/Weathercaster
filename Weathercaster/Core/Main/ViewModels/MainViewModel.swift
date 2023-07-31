@@ -18,6 +18,10 @@ class MainViewModel: ObservableObject {
     @Published var weather: WeatherModel? = nil
     @Published var showFullWeatherInfo: Bool = false
     
+    // weather image
+    @Published var image: UIImage? = nil
+    @Published var isLoading: Bool = false
+    
     // Search by address or placemark name
     @Published var searchResults: [PlaceModel] = []
     @Published var textFieldText: String = ""
@@ -47,6 +51,15 @@ class MainViewModel: ObservableObject {
         weatherDataService.$weather
             .sink { [weak self] receiveWeatherModel in
                 self?.weather = receiveWeatherModel
+            }
+            .store(in: &cancellables)
+        
+        // WeatherDataService 에서 유지하는 image 에 변화가 감지되면 mainVM 의 image 도 업데이트
+        weatherDataService.$image
+            .sink { [weak self] _ in
+                self?.isLoading = false
+            } receiveValue: { [weak self] receivedImage in
+                self?.image = receivedImage
             }
             .store(in: &cancellables)
     }

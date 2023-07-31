@@ -12,8 +12,10 @@ import SwiftUI
 
 class WeatherDataService {
     @Published var weather: WeatherModel? = nil
+    @Published var image: UIImage? = nil
     
     private var weatherSubscription: AnyCancellable?
+    private var imageSubscription: AnyCancellable?
     
     private let openKey: String = "OPENWEATHERMAP_KEY"
     
@@ -38,6 +40,25 @@ class WeatherDataService {
                 receiveValue: { [weak self] receivedWeatherModel in
                     self?.weather = receivedWeatherModel
                     self?.weatherSubscription?.cancel()
+                    self?.getWeatherImage(receivedWeatherModel)
             })
+    }
+    
+    private func getWeatherImage(_ weather: WeatherModel) {
+        guard let iconCode = weather.weather?.first?.icon
+        else { print("IconCode를 확인할 수 없음."); return }
+        
+        guard let url = URL(string: "https://openweathermap.org/img/wn/\(iconCode)@2x.png") else { print("유효하지 않은 URL."); return }
+        
+        imageSubscription = NetworkingManager.download(url: url)
+            .tryMap({ data in
+                return UIImage(data: data)
+            })
+            .sink(
+                receiveCompletion: NetworkingManager.handleCompletion,
+                receiveValue: { [weak self] receivedImage in
+                    self?.image = receivedImage
+                    self?.imageSubscription?.cancel()
+                })
     }
 }

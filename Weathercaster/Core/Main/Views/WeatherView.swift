@@ -9,18 +9,12 @@ import SwiftUI
 
 struct WeatherView: View {
     @EnvironmentObject private var mainVM: MainViewModel
-    @StateObject private var weatherVM: WeatherViewModel
-    
-    init(weather: WeatherModel) {
-        _weatherVM = StateObject(wrappedValue: WeatherViewModel(weather: weather))
-    }
     
     var body: some View {
         summaryWeatherInfo
         
         if mainVM.showFullWeatherInfo {
             fullWeatherInfo
-                .transition(.push(from: .top))
         }
     }
 }
@@ -38,12 +32,16 @@ extension WeatherView {
         // Summary Weather Info
         HStack {
             // Weather IconImage
-            if let image = weatherVM.image {
+            if let image = mainVM.image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50, height: 50)
-            } else if weatherVM.isLoading {
+                    .clipShape(Circle())
+                    .background(
+                        Color.theme.backgroundColor.cornerRadius(14)
+                    )
+            } else if mainVM.isLoading {
                 ProgressView()
             } else {
                 Image(systemName: "questionmark")
@@ -52,10 +50,10 @@ extension WeatherView {
             
             VStack(alignment: .leading) {
                 // Weather 지역명
-                Text(weatherVM.weather.name ?? "-")
+                Text(mainVM.weather?.name ?? "-")
                     .font(.title.weight(.bold))
                 // 기상상태 대표설명
-                if let weatherList = weatherVM.weather.weather {
+                if let weatherList = mainVM.weather?.weather {
                     HStack {
                         ForEach(weatherList, id: \.id) {
                             Text($0.main ?? "")
@@ -64,6 +62,7 @@ extension WeatherView {
                     }
                 }
             }
+            .padding(.horizontal)
             
             Spacer()
             
@@ -71,7 +70,7 @@ extension WeatherView {
                 toggleWeatherView()
             } label: {
                 Image(systemName: "chevron.down")
-                    .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 180 : 360))
+                    .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 0 : 180))
                     .imageScale(.large)
                     .font(.headline)
             }
@@ -87,7 +86,7 @@ extension WeatherView {
         ScrollView {
             LazyVStack(pinnedViews: .sectionHeaders) {
                 // 기상 상태
-                if let weatherList = weatherVM.weather.weather {
+                if let weatherList = mainVM.weather?.weather {
                     Section {
                         HStack {
                             ForEach(weatherList, id: \.id) { weather in
@@ -103,31 +102,30 @@ extension WeatherView {
                 }
                 Divider()
                 // 온도, 기압, 습도
-                if let main = weatherVM.weather.main {
+                if let main = mainVM.weather?.main {
                     Section {
-                        HStack {
-                            VStack {
+                        VStack {
+                            HStack {
                                 FullWeatherInfoMain(title: "평균 기온", value: main.temp ?? 0)
                                     .padding()
                                 FullWeatherInfoMain(title: "체감 온도", value: main.feelsLike ?? 0)
                                     .padding()
                             }
                             
-                            VStack {
+                            HStack {
                                 FullWeatherInfoMain(title: "최저 온도", value: main.tempMin ?? 0)
                                     .padding()
                                 FullWeatherInfoMain(title: "최대 온도", value: main.tempMax ?? 0)
                                     .padding()
                             }
                             
-                            VStack {
+                            HStack {
                                 FullWeatherInfoMain(title: "기압", value: main.feelsLike ?? 0)
                                     .padding()
                                 FullWeatherInfoMain(title: "습도", value: main.feelsLike ?? 0)
                                     .padding()
                             }
                         }
-                        .padding()
                     } header: {
                         HStack {
                             FullWeatherInfoViewHeader(weatherType: .main)

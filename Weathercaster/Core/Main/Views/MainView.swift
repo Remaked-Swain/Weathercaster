@@ -14,6 +14,14 @@ struct MainView: View {
     
     @State private var annotationPlaces: [PlaceModel] = []
     
+    private var locationCompare: Bool {
+        let mainVMLatitude = mainVM.region.center.latitude
+        let mainVMLongitude = mainVM.region.center.longitude
+        let locationManagerLatitude = locationManager.region.center.latitude
+        let locationManagerLongitude = locationManager.region.center.longitude
+        return mainVMLatitude == locationManagerLatitude && mainVMLongitude == locationManagerLongitude
+    }
+    
     var body: some View {
         ZStack {
             // Background
@@ -28,30 +36,13 @@ struct MainView: View {
 
                 Spacer()
                 
-                HStack {
-                    Spacer()
-                    
-                    Button {
-                        moveCameraOnLocation(to: nil)
-                    } label: {
-                        Image(systemName: "location")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .padding()
-                            .background(.thinMaterial)
-                            .clipShape(Circle())
-                            .padding(.bottom)
-                            .shadow(radius: 10)
-                    }
+                if mainVM.showFullWeatherInfo == false {
+                    locationController
                 }
-                .frame(maxWidth: .infinity)
 
-                if let weather = mainVM.weather {
-                    WeatherView(weather: weather)
-                        .environmentObject(mainVM)
-                        .shadow(radius: 10)
-                }
+                WeatherView()
+                    .environmentObject(mainVM)
+                    .shadow(radius: 10)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
@@ -95,6 +86,28 @@ extension MainView {
             }
         }
         .shadow(radius: 10)
+    }
+    
+    private var locationController: some View {
+        HStack {
+            Spacer()
+            
+            Button {
+                moveCameraOnLocation(to: nil)
+            } label: {
+                Image(systemName: locationCompare ? "location.fill" : "location")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .padding()
+                    .background(.thinMaterial)
+                    .clipShape(Circle())
+                    .padding(.bottom)
+                    .shadow(radius: 10)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .transition(.opacity)
     }
 }
 
