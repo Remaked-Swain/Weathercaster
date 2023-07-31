@@ -9,6 +9,6 @@ OpenWeatherMap API를 이용해 날씨 정보 앱을 만들어보자
 2. 기본적인 UI 구현 // Done
 3. 경, 위도 좌표를 추출할 수 있는 방법 마련, MapKit 사용 // Done
 4. 위치정보 허용받기 (plist) // Done
-5. 지도 조작 후 DataService 연동하여 주소, 날씨 정보 업데이트하는 메서드 서로 연결하고 Combine 유지
+5. 지도 조작 후 DataService 연동하여 주소, 날씨 정보 업데이트하는 메서드 서로 연결하고 Combine 유지 // Done
 6. 날씨 정보 UI 개선
 7. ViewModel 로직 개선, 사용자 위치로 이동하는 키 같은게 이상함.
