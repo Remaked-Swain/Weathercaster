@@ -91,12 +91,27 @@ extension WeatherView {
             }
             .fullWeatherDataSectionModifier()
             
-            LazyVGrid(columns: column, spacing: 0, pinnedViews: .sectionHeaders) {
+            LazyHGrid(rows: column, pinnedViews: .sectionHeaders) {
                 Section {
-                    //
+                    Text("dfsfdasf")
                 } header: {
                     FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
                 }
+                .padding()
+                
+                Section {
+                    Text("dfsfdasf")
+                } header: {
+                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+                }
+                .padding()
+                
+                Section {
+                    Text("dfsfdasf")
+                } header: {
+                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+                }
+                .padding()
             }
             .fullWeatherDataSectionModifier()
         }
