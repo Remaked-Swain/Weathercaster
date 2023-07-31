@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct FullWeatherInfoViewHeader: View {
-    let weatherType: WeatherType
+    let imageName: String
+    let title: String
     
     var body: some View {
         HStack {
-            Image(systemName: weatherType.imageName)
-            Text(weatherType.title)
+            Image(systemName: imageName)
+            Text(title)
             Spacer()
         }
         .font(.headline)

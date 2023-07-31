@@ -10,11 +10,13 @@ import SwiftUI
 struct WeatherView: View {
     @EnvironmentObject private var mainVM: MainViewModel
     
+    private let column: [GridItem] = [.init(.flexible()), .init(.flexible())]
+    
     var body: some View {
-        summaryWeatherInfo
-        
         if mainVM.showFullWeatherInfo {
             fullWeatherInfo
+        } else {
+            summaryWeatherInfo
         }
     }
 }
@@ -66,10 +68,10 @@ extension WeatherView {
             
             Spacer()
             
-            Image(systemName: "chevron.down")
-                .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 0 : 180))
+            Image(systemName: "chevron.up")
                 .imageScale(.large)
                 .font(.headline)
+                .foregroundColor(.theme.accentColor)
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -81,59 +83,75 @@ extension WeatherView {
         // Full Weather Info
         ScrollView {
             LazyVStack(pinnedViews: .sectionHeaders) {
-                // 기상 상태
-                if let weatherList = mainVM.weather?.weather {
-                    Section {
-                        HStack {
-                            ForEach(weatherList, id: \.id) { weather in
-                                Text(weather.description ?? "")
-                                    .font(.headline)
-                            }
-                        }
-                        .padding()
-                    } header: {
-                        FullWeatherInfoViewHeader(weatherType: .weatherList)
-                    }
-                    .padding()
+                Section {
+                    weather
+                } header: {
+                    FullWeatherInfoViewHeader(imageName: "calendar", title: "기상 상태")
                 }
-                Divider()
-                // 온도, 기압, 습도
-                if let main = mainVM.weather?.main {
-                    Section {
-                        VStack {
-                            HStack {
-                                FullWeatherInfoMain(title: "평균 기온", value: main.temp ?? 0)
-                                    .padding()
-                                FullWeatherInfoMain(title: "체감 온도", value: main.feelsLike ?? 0)
-                                    .padding()
-                            }
-                            
-                            HStack {
-                                FullWeatherInfoMain(title: "최저 온도", value: main.tempMin ?? 0)
-                                    .padding()
-                                FullWeatherInfoMain(title: "최대 온도", value: main.tempMax ?? 0)
-                                    .padding()
-                            }
-                            
-                            HStack {
-                                FullWeatherInfoMain(title: "기압", value: main.feelsLike ?? 0)
-                                    .padding()
-                                FullWeatherInfoMain(title: "습도", value: main.feelsLike ?? 0)
-                                    .padding()
-                            }
-                        }
-                    } header: {
-                        HStack {
-                            FullWeatherInfoViewHeader(weatherType: .main)
-                        }
-                    }
-                    .padding()
-                }
-                Divider()
             }
-            .frame(maxWidth: .infinity)
-            .background(.thinMaterial)
-            .cornerRadius(14)
+            .fullWeatherDataSectionModifier()
+            
+            LazyVGrid(columns: column, spacing: 0, pinnedViews: .sectionHeaders) {
+                Section {
+                    //
+                } header: {
+                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+                }
+            }
+            .fullWeatherDataSectionModifier()
+        }
+    }
+}
+
+// MARK: FullWeatherDataInfo - Sections
+extension WeatherView {
+    private var weather: some View {
+        HStack {
+            if let image = mainVM.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                    .background(
+                        Color.theme.backgroundColor.cornerRadius(14)
+                    )
+            } else if mainVM.isLoading {
+                ProgressView()
+            } else {
+                Image(systemName: "questionmark")
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            if let weather = mainVM.weather?.weather?.first {
+                VStack(alignment: .leading) {
+                    Text(weather.description ?? "-")
+                        .font(.title)
+                        .fontWeight(.heavy)
+                    Text(weather.main ?? "-")
+                }
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.down")
+                .imageScale(.large)
+                .font(.headline)
+                .foregroundColor(.theme.accentColor)
+        }
+        .onTapGesture {
+            toggleWeatherView()
+        }
+    }
+}
+
+// MARK: Methods
+extension WeatherView {
+    private func toggleWeatherView() {
+        withAnimation(.spring()) {
+            mainVM.showFullWeatherInfo.toggle()
         }
     }
 }

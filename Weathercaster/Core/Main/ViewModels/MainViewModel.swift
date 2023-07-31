@@ -16,7 +16,7 @@ class MainViewModel: ObservableObject {
     
     // weather
     @Published var weather: WeatherModel? = nil
-    @Published var showFullWeatherInfo: Bool = false
+    @Published var showFullWeatherInfo: Bool = true
     
     // weather image
     @Published var image: UIImage? = nil

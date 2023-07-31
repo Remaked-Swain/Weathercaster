@@ -106,30 +106,3 @@ struct Sys: Codable {
     let country: String?
     let sunrise, sunset: Int?
 }
-
-@frozen enum WeatherType: String {
-//    case coord, base, dt
-    case weatherList, main, visibility, wind, clouds, sys
-    
-    var imageName: String {
-        switch self {
-        case .weatherList: return "calendar"
-        case .main: return "thermometer.medium"
-        case .visibility: return "eye"
-        case .wind: return "wind"
-        case .clouds: return "cloud.fill"
-        case .sys: return "sun.and.horizon"
-        }
-    }
-    
-    var title: String {
-        switch self {
-        case .weatherList: return "기상 상태"
-        case .main: return "기온, 기압, 습도"
-        case .visibility: return "가시성"
-        case .wind: return "바람"
-        case .clouds: return "구름 양"
-        case .sys: return "일출, 일몰"
-        }
-    }
-}

@@ -25,7 +25,7 @@
 		0488BB242A767AD200484208 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488BB232A767AD200484208 /* SearchBar.swift */; };
 		0488BB282A76803300484208 /* NetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488BB272A76803300484208 /* NetworkingManager.swift */; };
 		0488BB302A76A76B00484208 /* FullWeatherInfoViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488BB2F2A76A76B00484208 /* FullWeatherInfoViewHeader.swift */; };
-		0488BB342A76AF3E00484208 /* FullWeatherInfoMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488BB332A76AF3E00484208 /* FullWeatherInfoMain.swift */; };
+		0488BB362A77BAC700484208 /* ViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488BB352A77BAC700484208 /* ViewModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +50,7 @@
 		0488BB232A767AD200484208 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		0488BB272A76803300484208 /* NetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingManager.swift; sourceTree = "<group>"; };
 		0488BB2F2A76A76B00484208 /* FullWeatherInfoViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullWeatherInfoViewHeader.swift; sourceTree = "<group>"; };
-		0488BB332A76AF3E00484208 /* FullWeatherInfoMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullWeatherInfoMain.swift; sourceTree = "<group>"; };
+		0488BB352A77BAC700484208 /* ViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +121,7 @@
 				0488BADD2A73CEE500484208 /* Bundle+APIKey.swift */,
 				0488BB072A7510A000484208 /* PreviewProvider.swift */,
 				0488BB122A751C8F00484208 /* Color.swift */,
+				0488BB352A77BAC700484208 /* ViewModifier.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -175,7 +176,6 @@
 			children = (
 				0488BB232A767AD200484208 /* SearchBar.swift */,
 				0488BB2F2A76A76B00484208 /* FullWeatherInfoViewHeader.swift */,
-				0488BB332A76AF3E00484208 /* FullWeatherInfoMain.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -251,7 +251,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0488BB342A76AF3E00484208 /* FullWeatherInfoMain.swift in Sources */,
 				0488BB242A767AD200484208 /* SearchBar.swift in Sources */,
 				0488BB1F2A76484B00484208 /* WeatherDataService.swift in Sources */,
 				0488BAF42A74D89900484208 /* WeatherView.swift in Sources */,
@@ -259,6 +258,7 @@
 				0488BB1B2A76195B00484208 /* PlaceModel.swift in Sources */,
 				0488BB132A751C8F00484208 /* Color.swift in Sources */,
 				0488BB152A76113500484208 /* LocationManager.swift in Sources */,
+				0488BB362A77BAC700484208 /* ViewModifier.swift in Sources */,
 				0488BB0A2A75119000484208 /* MainView.swift in Sources */,
 				0488BADE2A73CEE500484208 /* Bundle+APIKey.swift in Sources */,
 				0488BAE32A73E58700484208 /* WeatherModel.swift in Sources */,
