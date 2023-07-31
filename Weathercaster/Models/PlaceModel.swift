@@ -24,12 +24,14 @@ struct PlaceModel: Identifiable {
         var cityAndState = ""
         var address = ""
         
-        cityAndState = self.mapItem.placemark.locality ?? "" // 상위지명
+        // 상위 지명(시, 구 등)
+        cityAndState = self.mapItem.placemark.locality ?? ""
         if let city = self.mapItem.placemark.administrativeArea {
             cityAndState = cityAndState.isEmpty ? city : "\(city), \(cityAndState)"
         }
         
-        address = self.mapItem.placemark.subThoroughfare ?? "" // 하위주소
+        // 하위 지명(동, 도로명 혹은 지번)
+        address = self.mapItem.placemark.subThoroughfare ?? ""
         if let street = self.mapItem.placemark.thoroughfare {
             address = address.isEmpty ? street : "\(street), \(address)"
         }

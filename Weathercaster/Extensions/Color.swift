@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    static var theme = Theme()
+    static let theme = Theme()
 }
 
 struct Theme {
