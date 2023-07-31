@@ -66,14 +66,10 @@ extension WeatherView {
             
             Spacer()
             
-            Button {
-                toggleWeatherView()
-            } label: {
-                Image(systemName: "chevron.down")
-                    .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 0 : 180))
-                    .imageScale(.large)
-                    .font(.headline)
-            }
+            Image(systemName: "chevron.down")
+                .rotationEffect(Angle(degrees: mainVM.showFullWeatherInfo ? 0 : 180))
+                .imageScale(.large)
+                .font(.headline)
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -138,15 +134,6 @@ extension WeatherView {
             .frame(maxWidth: .infinity)
             .background(.thinMaterial)
             .cornerRadius(14)
-        }
-    }
-}
-
-// MARK: Methods
-extension WeatherView {
-    private func toggleWeatherView() {
-        withAnimation(.spring()) {
-            mainVM.showFullWeatherInfo.toggle()
         }
     }
 }

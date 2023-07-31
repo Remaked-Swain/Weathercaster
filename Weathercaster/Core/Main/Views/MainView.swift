@@ -14,6 +14,8 @@ struct MainView: View {
     
     @State private var annotationPlaces: [PlaceModel] = []
     
+    @FocusState private var textFieldFocused: Bool
+    
     var body: some View {
         ZStack {
             // Background
@@ -35,6 +37,10 @@ struct MainView: View {
                 WeatherView()
                     .environmentObject(mainVM)
                     .shadow(radius: 10)
+                    .onTapGesture {
+                        hideKeyboard()
+                        toggleWeatherView()
+                    }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
@@ -54,6 +60,7 @@ extension MainView {
     private var searchSection: some View {
         VStack {
             SearchBar(textFieldText: $mainVM.textFieldText)
+                .focused($textFieldFocused)
                 .onTapGesture {
                     // 검색창 조작 시 화면 확보를 위해 WeatherView 접기.
                     guard mainVM.showFullWeatherInfo else { return }
@@ -112,6 +119,7 @@ extension MainView {
     
     private func moveCameraOnLocation(to place: PlaceModel?) {
         withAnimation(.easeInOut) {
+            hideKeyboard()
             mainVM.moveCameraOnLocation(to: place)
             mainVM.textFieldText.removeAll()
         }
@@ -121,5 +129,9 @@ extension MainView {
         withAnimation(.spring()) {
             mainVM.showFullWeatherInfo.toggle()
         }
+    }
+    
+    private func hideKeyboard() {
+        textFieldFocused = false
     }
 }

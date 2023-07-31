@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchBar: View {
+    @FocusState private var textFieldFocused: Bool
     @Binding var textFieldText: String
     
     var body: some View {
@@ -17,10 +18,12 @@ struct SearchBar: View {
                 .foregroundColor(textFieldText.isEmpty ? .secondary : .theme.accentColor)
             
             TextField("주소 검색", text: $textFieldText)
+                .focused($textFieldFocused)
             
             if textFieldText.isEmpty == false {
                 Button {
                     textFieldText.removeAll()
+                    hideKeyboard()
                 } label: {
                     Text("취소")
                 }
@@ -30,5 +33,11 @@ struct SearchBar: View {
         .padding()
         .background(.thinMaterial)
         .cornerRadius(14)
+    }
+    
+    private func hideKeyboard() {
+        withAnimation(.easeInOut) {
+            textFieldFocused = false
+        }
     }
 }
