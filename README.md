@@ -11,4 +11,4 @@ OpenWeatherMap API를 이용해 날씨 정보 앱을 만들어보자
 4. 위치정보 허용받기 (plist) // Done
 5. 지도 조작 후 DataService 연동하여 주소, 날씨 정보 업데이트하는 메서드 서로 연결하고 Combine 유지 // Done
 6. 날씨 정보 UI 개선
-7. FocusState 통해서 Keyboard dismiss function 구현
+7. FocusState 통해서 Keyboard dismiss function 구현 // Done
