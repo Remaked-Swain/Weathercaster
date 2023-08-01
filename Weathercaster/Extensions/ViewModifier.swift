@@ -12,7 +12,7 @@ struct FullWeatherDataSectionModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(.thinMaterial)
+            .background(.ultraThinMaterial)
             .cornerRadius(14)
     }
 }

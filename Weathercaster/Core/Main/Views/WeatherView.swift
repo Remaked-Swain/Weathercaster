@@ -10,8 +10,6 @@ import SwiftUI
 struct WeatherView: View {
     @EnvironmentObject private var mainVM: MainViewModel
     
-    private let column: [GridItem] = [.init(.flexible()), .init(.flexible())]
-    
     var body: some View {
         if mainVM.showFullWeatherInfo {
             fullWeatherInfo
@@ -75,45 +73,118 @@ extension WeatherView {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.thinMaterial)
+        .background(.ultraThinMaterial)
         .cornerRadius(14)
     }
     
     private var fullWeatherInfo: some View {
         // Full Weather Info
         ScrollView {
+            // weather
             LazyVStack(pinnedViews: .sectionHeaders) {
                 Section {
                     weather
                 } header: {
                     FullWeatherInfoViewHeader(imageName: "calendar", title: "기상 상태")
                 }
-            }
-            .fullWeatherDataSectionModifier()
+            }.fullWeatherDataSectionModifier()
             
-            LazyHGrid(rows: column, pinnedViews: .sectionHeaders) {
-                Section {
-                    Text("dfsfdasf")
-                } header: {
-                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+            // temperature
+            HStack {
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        feelsLike
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "thermometer", title: "체감 온도")
+                    }
                 }
-                .padding()
+                .fullWeatherDataSectionModifier()
                 
-                Section {
-                    Text("dfsfdasf")
-                } header: {
-                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        tempMin
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "thermometer.low", title: "최저 온도")
+                    }
                 }
-                .padding()
+                .fullWeatherDataSectionModifier()
                 
-                Section {
-                    Text("dfsfdasf")
-                } header: {
-                    FullWeatherInfoViewHeader(imageName: "thermometer", title: "기온")
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        tempMax
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "thermometer.high", title: "최대 온도")
+                    }
                 }
-                .padding()
+                .fullWeatherDataSectionModifier()
             }
-            .fullWeatherDataSectionModifier()
+            .padding(.top)
+            
+            // pressure & humidity
+            HStack {
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        pressure
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "gauge.medium", title: "기압")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+                
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        humidity
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "humidity", title: "습도")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+            }
+            .padding(.top)
+            
+            // visibility & clouds
+            HStack {
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        visibility
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "eye.fill", title: "가시거리")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+                
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        cloud
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "cloud.fill", title: "구름 양")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+            }
+            .padding(.top)
+            
+            // wind
+            HStack {
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        wind
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "wind", title: "풍속")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+                
+                LazyVStack(pinnedViews: .sectionHeaders) {
+                    Section {
+                        doc
+                    } header: {
+                        FullWeatherInfoViewHeader(imageName: "doc", title: "날씨 데이터 출처")
+                    }
+                }
+                .fullWeatherDataSectionModifier()
+            }
+            .padding(.top)
         }
     }
 }
@@ -143,9 +214,20 @@ extension WeatherView {
             if let weather = mainVM.weather?.weather?.first {
                 VStack(alignment: .leading) {
                     Text(weather.description ?? "-")
-                        .font(.title)
+                        .font(.title2)
                         .fontWeight(.heavy)
                     Text(weather.main ?? "-")
+                }
+            }
+            
+            Spacer()
+            
+            if let temp = mainVM.weather?.main?.temp {
+                VStack(alignment: .leading) {
+                    Text("기온")
+                    Text(String(format: "%.2f°", temp))
+                        .font(.title2)
+                        .fontWeight(.bold)
                 }
             }
             
@@ -158,6 +240,99 @@ extension WeatherView {
         }
         .onTapGesture {
             toggleWeatherView()
+        }
+    }
+    
+    private var feelsLike: some View {
+        HStack {
+            if let feelsLike = mainVM.weather?.main?.feelsLike {
+                Text(String(format: "%.2f°", feelsLike))
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var tempMin: some View {
+        HStack {
+            if let tempMin = mainVM.weather?.main?.tempMin {
+                Text(String(format: "%.2f°", tempMin))
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var tempMax: some View {
+        HStack {
+            if let tempMax = mainVM.weather?.main?.tempMax {
+                Text(String(format: "%.2f°", tempMax))
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var pressure: some View {
+        HStack {
+            if let pressure = mainVM.weather?.main?.pressure {
+                Text(String(format: "%.f hPa", pressure))
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var humidity: some View {
+        HStack {
+            if let humidity = mainVM.weather?.main?.humidity {
+                Text("\(humidity) %")
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var visibility: some View {
+        HStack {
+            if let visibility = mainVM.weather?.visibility {
+                Text("\(visibility) m")
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var cloud: some View {
+        HStack {
+            if let cloud = mainVM.weather?.clouds?.all {
+                Text("\(cloud) %")
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var wind: some View {
+        HStack {
+            if let windSpeed = mainVM.weather?.wind?.speed {
+                Text(String(format: "%.2f m/s", windSpeed))
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+    
+    private var doc: some View {
+        HStack {
+            if let url = URL(string: "https://openweathermap.org") {
+                Link(destination: url) {
+                    Text("OpenWeatherMap API")
+                        .lineLimit(1)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+            }
         }
     }
 }

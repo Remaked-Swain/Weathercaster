@@ -80,7 +80,7 @@ extension MainView {
                         }
                     }
                 }
-                .background(.thinMaterial)
+                .background(.ultraThinMaterial)
                 .cornerRadius(14)
             }
         }

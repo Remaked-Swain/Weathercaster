@@ -31,7 +31,7 @@ struct SearchBar: View {
         }
         .font(.headline)
         .padding()
-        .background(.thinMaterial)
+        .background(.ultraThinMaterial)
         .cornerRadius(14)
     }
     
