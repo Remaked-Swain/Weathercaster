@@ -164,7 +164,7 @@ extension WeatherView {
             }
             .padding(.top)
             
-            // wind
+            // wind & doc
             HStack {
                 LazyVStack(pinnedViews: .sectionHeaders) {
                     Section {
@@ -179,7 +179,7 @@ extension WeatherView {
                     Section {
                         doc
                     } header: {
-                        FullWeatherInfoViewHeader(imageName: "doc", title: "날씨 데이터 출처")
+                        FullWeatherInfoViewHeader(imageName: "doc", title: "날씨 데이터 출처", lintLimit: 1)
                     }
                 }
                 .fullWeatherDataSectionModifier()
