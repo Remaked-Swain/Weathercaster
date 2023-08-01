@@ -276,7 +276,7 @@ extension WeatherView {
     private var pressure: some View {
         HStack {
             if let pressure = mainVM.weather?.main?.pressure {
-                Text(String(format: "%.f hPa", pressure))
+                Text("\(pressure) hPa")
                     .font(.title2)
                     .fontWeight(.bold)
             }
