@@ -15,6 +15,7 @@ struct FullWeatherInfoViewHeader: View {
         HStack {
             Image(systemName: imageName)
             Text(title)
+                .lineLimit(1)
             Spacer()
         }
         .font(.headline)
