@@ -1,8 +1,35 @@
 #  Weather-Caster
 OpenWeatherMap API를 이용해 날씨 정보 앱을 만들어보자
 
+## ScreenShots
+<p>
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_entry.PNG?raw=true" alt="entry_dark" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_light.PNG?raw=true" alt="entry" width="250px">
+</p>
+
+<p>
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_Search_dark.PNG?raw=true" alt="search_dark" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_Search_light.PNG?raw=true" alt="search_light" width="250px">
+</p>
+
+<p>
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_dark.PNG?raw=true" alt="weatherInfo_dark" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_light.PNG?raw=true" alt="weatherInfo_light" width="250px">
+</p>
+
+<p>
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_dark.PNG?raw=true" alt="weatherInfo_dark" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_light.PNG?raw=true" alt="weatherInfo_light" width="250px">
+</p>
+
+![horizon_dark](https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_horizon_dark.PNG?raw=true)
+![weatherInfo_horizon_dark](https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_horizon_dark.PNG?raw=true)
+
+---------------------
+
 ## OpenWeatherMap API
-* 사용법
 OpenWeatherMap API에서 날씨 정보에 대한 데이터를 얻을 수 있다.
 
 ![MakeAnAPICall](https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_OpenWeatherMap_API_Call.png?raw=true)
@@ -71,7 +98,7 @@ extension LocationManager: CLLocationManagerDelegate {
 ---------------------
 
 ## WeatherDataService & NetworkingManager
-URL로 요청을 한 모듈에서 관리할 수 있도록 하기 위해 만든 NetworkingManager와 OpenWeatherMap API와 통신을 수행할 WeatherDataService 클래스의 도움을 받아 날씨 데이터를 관리한다.
+URL로의 요청을 하나의 모듈에서 관리할 수 있도록 하기 위해 만든 NetworkingManager와, OpenWeatherMap API와 통신을 수행할 WeatherDataService 클래스의 도움을 받아 날씨 데이터를 관리한다.
 
 ```Swift
 import Foundation
@@ -279,4 +306,3 @@ extension MainViewModel {
 5. 지도 조작 후 DataService 연동하여 주소, 날씨 정보 업데이트하는 메서드 서로 연결하고 Combine 유지 // Done
 6. 날씨 정보 UI 개선 // Done
 7. FocusState 통해서 Keyboard dismiss function 구현 // Done
-8. README.md 프로젝트 개발 일지 작성
