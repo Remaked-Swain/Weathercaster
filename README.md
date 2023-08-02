@@ -2,21 +2,38 @@
 OpenWeatherMap API를 이용해 날씨 정보 앱을 만들어보자
 
 ## ScreenShots
+* EntryPoint & MainView
+
 <p>
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_entry.PNG?raw=true" alt="entry_dark" width="250px">
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_light.PNG?raw=true" alt="entry" width="250px">
 </p>
 
+    * LocationManager는 앱 수행 시 위치 정보를 확인하고 필요할 경우 접근 허가 요청을 함.
+    * 앱의 진입점인 MainView 는 위의 사진과 같이 현재 사용자 위치를 기준으로 날씨 정보를 로드하고 지도 위에 표시해줌.
+    
+* 주소 검색
+
 <p>
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_Search_dark.PNG?raw=true" alt="search_dark" width="250px">
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_Search_light.PNG?raw=true" alt="search_light" width="250px">
+    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
 </p>
 
+    * MapKit 으로 검색하는 문자열과 지역 정보를 알려주고 건물명, 지번, 도로명 등으로 주소를 검색할 수 있음.
+    * 단시간의 과도한 요청을 막기 위해 약간의 딜레이를 주었고 이렇게 도출된 검색 결과를 터치하여 지도와 날씨 정보를 다시 불러올 수 있음.
+    * @FocusState를 통해 검색창 조작, 날씨 정보 확인, 사용자 위치로 이동하는 등의 활동이 서로 방해되지 않도록 하여 사용자의 편의성을 신경썼다.
+    
+* 날씨 정보 화면
+
 <p>
-    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_dark.PNG?raw=true" alt="weatherInfo_dark" width="250px">
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_light.PNG?raw=true" alt="weatherInfo_light" width="250px">
 </p>
+
+    * OpenWeatherMap API 를 통해 얻을 수 있는 날씨 정보를 적절한 UI와 함께 사용자에게 알려줌.
+    
+* 
 
 <p>
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
