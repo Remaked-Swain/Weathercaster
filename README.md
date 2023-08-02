@@ -31,18 +31,11 @@ OpenWeatherMap API를 이용해 날씨 정보 앱을 만들어보자
     <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_light.PNG?raw=true" alt="weatherInfo_light" width="250px">
 </p>
 
-    * OpenWeatherMap API 를 통해 얻을 수 있는 날씨 정보를 적절한 UI와 함께 사용자에게 알려줌.
-    
-* 
-
-<p>
-    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_SearchResult_dark.PNG?raw=true" alt="searchResult" width="250px">
-    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_dark.PNG?raw=true" alt="weatherInfo_dark" width="250px">
-    <img src="https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_light.PNG?raw=true" alt="weatherInfo_light" width="250px">
-</p>
-
 ![horizon_dark](https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_horizon_dark.PNG?raw=true)
 ![weatherInfo_horizon_dark](https://github.com/Remaked-Swain/ScreenShotRepository/blob/main/WeatherCaster/WeatherCaster_WeatherInfo_horizon_dark.PNG?raw=true)
+
+    * OpenWeatherMap API 를 통해 얻을 수 있는 날씨 정보를 적절한 UI와 함께 사용자에게 알려줌.
+    * 디바이스를 가로로 두었을 경우에도 UI는 아름다움.
 
 ---------------------
 
